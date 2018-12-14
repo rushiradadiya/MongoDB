@@ -2,7 +2,7 @@ const expect = require('expect');
 const request = require('supertest');
 const {app} = require('./../server');
 const {Lanet} = require('./../models/lanet');
-
+console.log('hello');
 beforeEach((done)=>{
     Lanet.remove({}).then(()=>done());
 });
