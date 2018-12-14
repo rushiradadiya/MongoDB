@@ -1,15 +1,14 @@
 const expect = require('expect');
 const request = require('supertest');
-const {app} = require('./../server');
-const {Lanet} = require('./../models/lanet');
-console.log('hello');
+const {app} = require('./../server.js');
+const {Lanet} = require('./../models/lanet.js');
 beforeEach((done)=>{
     Lanet.remove({}).then(()=>done());
 });
 
 describe('POST/lanet',() =>{
-    it('should create a new lanet',(done) =>{
-        var text = 'Test lanet text';
+it('should create a new lanet ',(done)=>{
+    var text = 'Test lanet text';
        request(app)
        .post('/lanet')
         .send({text})
@@ -29,6 +28,7 @@ describe('POST/lanet',() =>{
            }).catch((e)=>done(e));
        });
     });
+
     
     it('should not create lanet with invaild body data',(done)=>{
         request(app)
@@ -38,14 +38,12 @@ describe('POST/lanet',() =>{
         .end((err,res)=>{
             if(err)
                 {
-                    return done(err);
+                    return done(`Radadiya ${err}`);
                 }
             Lanet.find().then((lanet)=>{
                 expect(lanet.length).toBe(0);
                 done();
-            }).catch((e)=>done(e));
+            }).catch((e)=>done(`rushita ${e}`));
         });
-    });
-    
-    
-});
+    });    
+ });

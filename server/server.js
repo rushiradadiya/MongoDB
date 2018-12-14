@@ -23,6 +23,15 @@ app.post('/lanet',(req,res)=>{
   });
 });
 
+app.get('/lanet',(req,res)=>{
+   Lanet.find().then((lanet)=>{
+       res.send({lanet});
+   },(e)=>{
+       res.status(400).send(e);
+   }) ;
+});
+
+
 app.listen(3000,() =>{
     console.log('Started on port 3000');
 });

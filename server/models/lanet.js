@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var Lanet = mongoose.model('Lanet',{
+var Lanet = mongoose.model('lanets',{
    text:{
        type:String,
        required:true,
