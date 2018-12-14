@@ -5,7 +5,7 @@ const {Lanet} = require('./../models/lanet.js');
 beforeEach((done)=>{
     Lanet.remove({}).then(()=>done());
 });
-
+console.log("hello");
 describe('POST/lanet',() =>{
 it('should create a new lanet ',(done)=>{
     var text = 'Test lanet text';
