@@ -2,14 +2,12 @@ var express = require('express');
 var bodyParser = require('body-parser')
 const {ObjectID} =require('mongodb');
 var {mongoose} = require('./db/mongoose.js');
-
+const port = process.env.PORT || 3000;
 var {Lanet} = require('./models/lanet');
-
-
 var {User} = require('./models/user');
 var app = express();
 
-const port = process.env.PORT || 3000;
+
 
 
 console.log(port);
