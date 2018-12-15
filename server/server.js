@@ -8,6 +8,8 @@ var {Lanet} = require('./models/lanet');
 
 var {User} = require('./models/user');
 var app = express();
+const port = process.env.PORT || 3000;
+
 
 app.use(bodyParser.json())
 
@@ -32,7 +34,6 @@ app.get('/lanet',(req,res)=>{
    }) ;
 });
 
-
 app.get('/lanet/:id',(req,res)=>{
     // console.log(req);
     var id = req.params.id;
@@ -54,8 +55,8 @@ app.get('/lanet/:id',(req,res)=>{
     //res.send(req.params);
 });
 
-app.listen(3000,() =>{
-    console.log('Started on port 3000');
+app.listen(port,() =>{
+    console.log(`Strated up to port ${port}`);
 });
 
 module.exports = {app};
