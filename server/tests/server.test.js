@@ -2,10 +2,22 @@ const expect = require('expect');
 const request = require('supertest');
 const {app} = require('./../server.js');
 const {Lanet} = require('./../models/lanet.js');
+
+const lanets=[{
+    text:'first test lanet'
+},{
+   text:'second test lanet' 
+}];
+
+
+
 beforeEach((done)=>{
-    Lanet.remove({}).then(()=>done());
+    Lanet.remove({}).then(()=>{
+       return Lanet.insertMany(lanets);
+    }).then(() => done());
 });
-console.log("hello");
+
+
 describe('POST/lanet',() =>{
 it('should create a new lanet ',(done)=>{
     var text = 'Test lanet text';
@@ -21,7 +33,7 @@ it('should create a new lanet ',(done)=>{
                {
                    return done(err);
                }
-           Lanet.find().then((lanet)=>{
+           Lanet.find({text}).then((lanet)=>{
                expect(lanet.length).toBe(1);
                expect(lanet[0].text).toBe(text);
                done();
@@ -41,9 +53,23 @@ it('should create a new lanet ',(done)=>{
                     return done(`Radadiya ${err}`);
                 }
             Lanet.find().then((lanet)=>{
-                expect(lanet.length).toBe(0);
+                expect(lanet.length).toBe(2);
                 done();
             }).catch((e)=>done(`rushita ${e}`));
         });
     });    
  });
+
+
+describe('GET /lanet',()=>{
+    it('should get all lanet data',(done)=>{
+        request(app)
+        .get('/lanet')
+        .expect(200)
+        .expect((res) =>{
+            expect(res.body.lanet.length).toBe(2);
+        })
+        .end(done);
+    });
+});
+
