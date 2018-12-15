@@ -7,9 +7,6 @@ var {Lanet} = require('./models/lanet');
 var {User} = require('./models/user');
 var app = express();
 
-
-
-
 console.log(port);
 app.use(bodyParser.json())
 
@@ -52,8 +49,36 @@ app.get('/lanet/:id',(req,res)=>{
     }).catch((e)=>{
         res.status(400).send();
     });
+    
+    
     //res.send(req.params);
 });
+
+
+
+app.delete('/lanet/:id',(req,res)=>{
+    var id = req.params.id;
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    
+//Lanet.findOneAndRemove({_id:'5c14e6f1003a8b040cc13880'}).then((lanet)=>{
+//  console.log(lanet);
+//});
+Lanet.findByIdAndRemove(id).then((lanet)=>{
+    if(!lanet){
+        return res.status(404).send();
+    }
+    res.send(lanet);
+}).catch((e)=>{
+    res.status(400).send();
+});
+    
+    
+});
+
+
+
 
 app.listen(port,() =>{
     console.log(`Strated up to port ${port}`);
