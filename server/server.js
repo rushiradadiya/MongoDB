@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser')
-
+const {ObjectID} =require('mongodb');
 var {mongoose} = require('./db/mongoose.js');
 
 var {Lanet} = require('./models/lanet');
@@ -25,12 +25,34 @@ app.post('/lanet',(req,res)=>{
 
 app.get('/lanet',(req,res)=>{
    Lanet.find().then((lanet)=>{
-       res.send({lanet});
+   //console.log(req);
+   res.send({lanet});
    },(e)=>{
        res.status(400).send(e);
    }) ;
 });
 
+
+app.get('/lanet/:id',(req,res)=>{
+    // console.log(req);
+    var id = req.params.id;
+    //validate
+    //find by text
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    
+    Lanet.findById(id).then((lanet)=>{
+        if (!lanet){
+             return res.status(404).send();
+        }
+      
+       res.send({lanet});
+    }).catch((e)=>{
+        res.status(400).send();
+    });
+    //res.send(req.params);
+});
 
 app.listen(3000,() =>{
     console.log('Started on port 3000');
