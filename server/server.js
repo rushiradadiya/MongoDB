@@ -8,9 +8,11 @@ var {Lanet} = require('./models/lanet');
 
 var {User} = require('./models/user');
 var app = express();
+
 const port = process.env.PORT || 3000;
 
 
+console.log(port);
 app.use(bodyParser.json())
 
 app.post('/lanet',(req,res)=>{
