@@ -1,5 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser')
+
+const _= require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser')
 const {ObjectID} =require('mongodb');
 var {mongoose} = require('./db/mongoose.js');
 const port = process.env.PORT || 3000;
@@ -77,7 +79,37 @@ Lanet.findByIdAndRemove(id).then((lanet)=>{
     
 });
 
-
+app.patch('/lanet/:id',(req,res)=>{
+    
+   //console.log(body);
+    var id = req.params.id;
+    var body = _.pick(req.body,['text','completed']);
+      
+      if(!ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+    
+    if(_.isBoolean(body.completed)&&body.completed)
+        {
+            body.completedAt = new Date().getTime();
+        }
+    else{
+        body.completed = false;
+        body.completedAt = null;
+    }
+    
+    Lanet.findByIdAndUpdate(id,{$set:body},{new:true}).then((lanet)=>{
+        
+        if(!lanet){
+            return res.status(404).send();
+        }
+           res.send(lanet);
+    }).catch((e)=>{
+        res.status(400).send();
+    });
+ 
+    
+})
 
 
 app.listen(port,() =>{

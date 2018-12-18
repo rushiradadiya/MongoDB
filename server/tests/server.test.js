@@ -10,7 +10,10 @@ const lanets=[{
     text:'first test lanet'
 },{
     _id :new ObjectID(),
-   text:'second test lanet' 
+   text:'second test lanet' ,
+    completed :true,
+    completedAt : 168
+    
 }];
 
 
@@ -151,3 +154,55 @@ describe('DELETE /lanet/:id',() =>{
         
     });
 });
+
+
+
+
+//update testing
+
+describe('PATCH /lanet/:id',() =>{
+    
+    it('should update the lanet',(done)=>{
+         var haxId = lanets[0]._id.toHexString();
+        
+        var text = 'This should be the new text';
+         request(app)
+        .patch(`/lanet/${haxId}`)
+       .send({
+             completed:true,
+             text
+         }) 
+        .expect(200)
+        .expect((res)=>{
+             expect(res.body.text).toBe(text);
+             expect(res.body.completed).toBe(true);
+             expect(res.body.completedAt).toBeA('number');
+         })
+        .end(done);
+    });
+    
+    
+     it('should clear completedat when lanet is not completed ',(done)=>{
+          var haxId = lanets[1]._id.toHexString();
+        
+        var text = 'This should be the new text !!';
+         request(app)
+        .patch(`/lanet/${haxId}`)
+       .send({
+             completed: false,
+             text
+         }) 
+        .expect(200)
+        .expect((res)=>{
+             expect(res.body.text).toBe(text);
+             expect(res.body.completed).toBe(false);
+             expect(res.body.completedAt).toNotExist();
+         })
+        .end(done);
+    });
+    
+})
+
+
+
+
