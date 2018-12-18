@@ -20,7 +20,7 @@ const lanets=[{
 
 beforeEach((done)=>{
     Lanet.remove({}).then(()=>{
-        console.log("hello");
+       
        return Lanet.insertMany(lanets);
     }).then(() => done());
 });
