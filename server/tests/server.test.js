@@ -17,6 +17,7 @@ const lanets=[{
 
 beforeEach((done)=>{
     Lanet.remove({}).then(()=>{
+        console.log("hello");
        return Lanet.insertMany(lanets);
     }).then(() => done());
 });
@@ -102,6 +103,49 @@ describe('GET /lanet/:id',()=>{
     it('should return 404 if lanet non object found',(done)=>{
         request(app)
         .get('/lanet/123')
+        .expect(404)
+        .end(done);
+        
+    });
+});
+
+
+describe('DELETE /lanet/:id',() =>{
+    it('should remove a lanet',(done)=>{
+        var haxId = lanets[1]._id.toHexString();
+         request(app)
+        .delete(`/lanet/${haxId}`)
+        .expect(200)
+        .expect((res) =>{
+        //console.log(res);   
+           expect(res.body._id).toBe(haxId);
+        })
+        .end((err,res)=>{
+             if(err)
+                 {
+                     return done(err);
+                 }
+             
+             Lanet.findById(haxId).then((lanetData)=>{
+                 expect(lanetData).toNotExist();
+                 done();
+             }).catch((e)=>done(e));
+             
+         });
+    });
+    
+    
+    it('should return 404 if lanet not found',(done)=>{
+          var haxId = new ObjectID().toHexString();
+         request(app)
+        .delete(`/lanet/${haxId}`)
+        .expect(404)
+        .end(done)
+    });
+    
+     it('should return 404 if object id not found',(done)=>{
+         request(app)
+        .delete('/lanet/123')
         .expect(404)
         .end(done);
         
