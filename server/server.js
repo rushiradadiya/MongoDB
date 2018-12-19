@@ -111,6 +111,37 @@ app.patch('/lanet/:id',(req,res)=>{
     
 })
 
+//POST/users
+
+app.post('/user',(req,res)=>{
+    var body = _.pick(req.body,['email','password']);
+    var user = new User(body);
+    
+//    User.findByToken
+//    user.generateAuthToken
+    
+    
+    
+    user.save().then((user)=>{
+       return user.generateAuthToken();
+        
+     //   res.send(user);
+    }).then((token)=>{
+        
+        console.log('Enter');
+        res.header('x-auth',token).send(user);
+    }).catch((e)=>{
+         res.send(e);
+        res.status(400).send();
+    });
+});
+
+
+
+
+
+
+
 
 app.listen(port,() =>{
     console.log(`Strated up to port ${port}`);
