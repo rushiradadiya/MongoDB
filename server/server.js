@@ -7,6 +7,7 @@ var {mongoose} = require('./db/mongoose.js');
 const port = process.env.PORT || 3000;
 var {Lanet} = require('./models/lanet');
 var {User} = require('./models/user');
+var {authenticate} = require('./middleware/authentication.js');   
 var app = express();
 
 console.log(port);
@@ -116,19 +117,9 @@ app.patch('/lanet/:id',(req,res)=>{
 app.post('/user',(req,res)=>{
     var body = _.pick(req.body,['email','password']);
     var user = new User(body);
-    
-//    User.findByToken
-//    user.generateAuthToken
-    
-    
-    
     user.save().then((user)=>{
        return user.generateAuthToken();
-        
-     //   res.send(user);
     }).then((token)=>{
-        
-        console.log('Enter');
         res.header('x-auth',token).send(user);
     }).catch((e)=>{
          res.send(e);
@@ -138,6 +129,10 @@ app.post('/user',(req,res)=>{
 
 
 
+
+app.get('/user/me',authenticate,(req,res) =>{
+     res.send(req.user);
+})
 
 
 
