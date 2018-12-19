@@ -117,10 +117,15 @@ app.patch('/lanet/:id',(req,res)=>{
 app.post('/user',(req,res)=>{
     var body = _.pick(req.body,['email','password']);
     var user = new User(body);
+  
     user.save().then((user)=>{
+          console.log("rushita --------------------"+user);
        return user.generateAuthToken();
+        
     }).then((token)=>{
         res.header('x-auth',token).send(user);
+        res.send(user);
+//        console.log(req.header('x-auth1'));
     }).catch((e)=>{
          res.send(e);
         res.status(400).send();
@@ -131,7 +136,8 @@ app.post('/user',(req,res)=>{
 
 
 app.get('/user/me',authenticate,(req,res) =>{
-     res.send(req.user);
+    
+         res.send(req.user);
 })
 
 
